@@ -14,7 +14,7 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const SwapNFT = await hre.ethers.getContractFactory("SwapNFT");
+  const SwapNFT = await hre.ethers.getContractFactory("LuNFT");
   const swapnft = await SwapNFT.deploy();
 
   await swapnft.deployed();

@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import MainMint from './MainMint';
 import NavBar from './NavBar';
 
-function App() {
-  const [accounts, setAccounts] = useState([]);
+import { 
+  useAccount, 
+  useNetwork, 
+  chain
+} from 'wagmi';
 
+
+function App() {
+  const [switchNetReq, setSwitchNet] = useState(false);
 
   return (
     <div className="App">
-      <NavBar accounts={accounts} setAccounts={setAccounts} />
-      <MainMint accounts={accounts} setAccounts={setAccounts} />
+      <NavBar switchNetReq={switchNetReq} setSwitchNet={setSwitchNet} />
+      <MainMint switchNetReq={switchNetReq} />
     </div>
   );
 }

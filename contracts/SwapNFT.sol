@@ -30,7 +30,7 @@ contract SwapNFT is ERC721, Ownable {
     function setBaseTokenUri( string calldata baseTokenUri_ ) external onlyOwner {
         baseTokenUri = baseTokenUri_;
     }
-
+    
     // to override and custom tokenURI func that was already privided by ERC721
     function tokenURI( uint256 tokenId_ ) public view override returns (string memory) {
         require(_exists(tokenId_), 'token does not exist!');
@@ -56,5 +56,11 @@ contract SwapNFT is ERC721, Ownable {
             _safeMint(msg.sender, newTokenId);
         }
     }
+
+    function balanceOfMine() public view returns (uint256) {
+        // require(msg.sender != address(0), "ERC721: address zero is not a valid owner");
+        return balanceOf(msg.sender);
+    }
+
 
 }

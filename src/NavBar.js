@@ -2,17 +2,32 @@ import React, { useEffect } from 'react'
 import { Box, Button, Flex, Link, Spacer } from '@chakra-ui/react'
 // import Facebook from "./assets/social-media-icons/facebook_32x32.png";
 
+import { useAccount, useConnect, useNetwork, chain } from 'wagmi'
+
 /**
  * @TODO switch account function and logout
  */
-export default function NavBar({ accounts, setAccounts }) {
-    const isConnected = accounts[0] ? true : false;
+export default function NavBar({ switchNetReq, setSwitchNet }) {
+    const { connect, connectors } = useConnect();
+    const { data: account } = useAccount();
 
-    const connectAccount = async() => {
-        if (!window.ethereum) return
-        const accounts = await window.ethereum.request({ method: "eth_requestAccounts"})
-        setAccounts(accounts);
+    const connectAccount = async() => { 
+        if ( account ) return;
+        connect(connectors[0]); 
     }  
+    
+    const { activeChain, switchNetwork } = useNetwork({
+        chainId: chain.rinkeby.id,
+    });
+    useEffect(() => {
+        if (activeChain && activeChain.id !== chain.rinkeby.id) {
+          setSwitchNet(true)
+          switchNetwork && switchNetwork();
+
+        } else {
+          setSwitchNet(false)
+        }
+      }, [activeChain, switchNetwork] )
 
 
     return (
@@ -31,10 +46,9 @@ export default function NavBar({ accounts, setAccounts }) {
                 <Spacer />
                 <Box margin="0 15px"> Mint </Box>
                 <Spacer />
-                <Box margin="0 15px"> Team </Box>
 
-            {isConnected ? (
-                <Box margin="0 15px"> Connected </Box>
+            { account ? (
+                switchNetReq ? (<Box margin="0 15px"> pls switch net </Box>) : (<Box margin="0 15px"> CONNECTED </Box>)
             ) : (
                 <Button 
                     backgroundColor="#D6517D"
